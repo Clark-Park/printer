@@ -4,4 +4,4 @@ venv/
 **/__pycache__/*
 media/*
 staticfiles/*
-db.*
+db.sqlite3

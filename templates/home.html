@@ -4,26 +4,27 @@
 {% block content %}
     <div class="row align-items-center h-100">
         <div class="container">
-            <div style="max-width: 620px; margin: 0 auto; padding: 20px 80px;">
+            <div style="max-width: 430px; margin: 0 auto; padding: 20px 80px;">
     {#            <h2>Login</h2>#}
                 <div></div>
                 <form method="post" novalidate>
                     {% csrf_token %}
-                        <div class="form-group">
-                            {% bootstrap_field form.username class="form-control" show_label=False %}
-                        </div>
-                        <div class="form-group">
-                            {% bootstrap_field form.password class="form-control" show_label=False %}
-                        </div>
-                        <div class="form-group justify-content-center text-center">
-                            <button type="submit" class="btn btn-success w-25">Login</button>
-                        </div>
+                    <div class="form-group">
+                        {% bootstrap_field form.username class="form-control" show_label=False %}
+                    </div>
+                    <div class="form-group">
+                        {% bootstrap_field form.password class="form-control" show_label=False %}
+                    </div>
+                    <br>
+                    <div class="form-group justify-content-center text-center">
+                        <button type="submit" class="btn btn-success w-25">Login</button>
+                    </div>
         {#            {{ form.as_p }}#}
                 </form>
-                <br>
-                <a class="btn btn-warning w-100 text-white font-weight-bolder" href="{% url 'social:begin' 'kakao' %}">
+
+                <a class="d-flex justify-content-around btn btn-warning w-100 text-white font-weight-bolder" style="background: orange;" href="{% url 'social:begin' 'kakao' %}">
                     <img src="{% static 'image/kakao_talk.png' %}" width="40">
-                    Login With KakaoTalk
+                    <div style="align-self: center;">Login With KakaoTalk</div>
                 </a><br>
             </div>
         </div>
