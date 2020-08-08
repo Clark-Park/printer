@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <div class="d-flex align-items-center h-100">
+        <div class="container">
+            <h1 class="text-center mb-lg-5 text-success">Select your Copier</h1>
+            <form id="id_search" action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-3 align-self-center">
+                        <select name="company" id="id_company" class="form-control" onchange="get_models()">
+                            <option value="" selected="">---------</option>
+                            {% for company in company_list %}
+                                <option value="{{ company.id }}">{{ company.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-1 align-self-center">
+                        <div>
+                            <input id="id_color_mono_color" type="radio" name="color_mono" value="1"  onchange="get_models()">
+                            <label for="id_color_mono_color">Color</label>
+                        </div>
+                        <div>
+                            <input id="id_color_mono_mono" type="radio" name="color_mono" value="0" onchange="get_models()">
+                            <label for="id_color_mono_mono">Mono</label>
+                        </div>
+                    </div>
+                    <div class="col-1 align-self-center">
+                        <div>
+                            <input id="id_bit_64" type="radio" name="bit" value="1"  onchange="get_models()">
+                            <label for="id_bit_64">64bit</label>
+                        </div>
+                        <div>
+                            <input id="id_bit_32" type="radio" name="bit" value="0" onchange="get_models()">
+                            <label for="id_bit_32">32bit</label>
+                        </div>
+                    </div>
+                    <div class="col-3 align-self-center">
+                        <select name="model_name" id="id_model_name" class="form-control" required>
+                            {% for model in model_list %}
+                                <option value="{{ model }}">{{ model }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-4 align-self-center">
+                        <input type="text" class="form-control" name="ip_address" placeholder="Type your Copier Ip Address" required>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center mt-lg-5">
+                    <button class="btn btn-success">Download and Install</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function get_models() {
+            var data = $("#id_search").serialize();
+            $.ajax({
+                url: "{% url 'get_model_names' %}?"+data,
+                method: 'GET',
+                success: function (response) {
+                    var model_names = response.model_names;
+                    var selectElement = document.getElementById('id_model_name');
+                    $("#id_model_name").html('');
+                    model_names.forEach((model_name, i) => {
+                        let option = document.createElement('option');
+                        option.value = model_name;
+                        option.appendChild(document.createTextNode(model_name));
+                        selectElement.appendChild(option);
+                        return option;
+                    });
+                }
+            })
+        }
+        {% comment %}$("#id_search").submit(function(e) {
+            e.preventDefault();
+            {#var data = $("#id_search").serialize();#}
+            var form = $('#id_search')[0];
+            var data = new FormData(form);
+            $.ajax({
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                url: {% url 'settings' %} ,
+                method: 'POST',
+                data: data,
+                success: function (response) {
+                    console.log(response);
+                }
+            })
+        }){% endcomment %}
+    </script>
+{% endblock %}
