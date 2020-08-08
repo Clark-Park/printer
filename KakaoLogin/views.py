@@ -63,7 +63,7 @@ def settings(request):
         copier = Copier.objects.filter(model_name=model_name).first()
 
         text = "{}\n".format(ip_address)
-        text = "{}{} {}\n".format(text,
+        text = "{}{}\n{}\n".format(text,
                                   "Color" if copier.color_mono == 1 else "Mono",
                                   "64bit" if copier.bit == 1 else "32bit")
         filename = 'download.txt'
@@ -87,9 +87,10 @@ def settings(request):
 
     companies = Company.objects.all()
     model_list = []
-    # model_names = Copier.objects.filter(color_mono=1, bit=1).values_list('model_name', flat=True)
-    # if len(model_names) > 1:
-    #     model_list = list(set(list(model_names)))
+    model_names = Copier.objects.filter(color_mono=1, bit=1).values_list('model_name', flat=True)
+
+    if len(model_names) > 0:
+        model_list = list(set(list(model_names)))
     return render(request, 'copier_search.html', {'company_list': companies, 'model_list': model_list})
 
 
