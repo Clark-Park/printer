@@ -4,12 +4,13 @@
 
 {% block header %}
     <div class="d-flex justify-content-end">
+        <div class="mr-2"><a href="/administrator/">Go To Administrator</a></div>
         <div class="mr-2"><a href="javascript:;" data-toggle="modal" data-target="#upload-modal">Upload</a></div>
         <div ><a href="{% url 'logout' %}">Logout</a></div>
     </div>
 {% endblock %}
 {% block content %}
-    <div class="d-flex align-items-center h-100">
+    <div class="d-flex align-items-center ">
         <div class="container">
             <h1 class="text-center mb-lg-5 text-success">Add Copier Information</h1>
             <form action="" method="post" class="form">
@@ -78,6 +79,31 @@
                 {% endfor %}
                 </tbody>
             </table>
+            {% if copier_list.has_other_pages %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if copier_list.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ copier_list.previous_page_number }}">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
+                        {% endif %}
+                        {% for i in copier_list.paginator.page_range %}
+                            {% if copier_list.number == i %}
+                                <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if copier_list.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ copier_list.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
         </div>
     </div>
 

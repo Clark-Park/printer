@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from .models import Company, Copier, DriverFile
 from .forms import CopierForm
 from django.http import HttpResponse, JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 
@@ -39,6 +40,7 @@ def copier_list(request):
     if not request.user.is_superuser:
         return redirect('home')
     copier_list = Copier.objects.all()
+    page = request.GET.get('page', 1)
     if request.method == 'POST':
         copier_form = CopierForm(request.POST)
         if copier_form.is_valid():
@@ -46,8 +48,15 @@ def copier_list(request):
             return redirect('copier:list')
     else:
         copier_form = CopierForm()
+    paginator = Paginator(copier_list, 10)
+    try:
+        copiers = paginator.page(page)
+    except PageNotAnInteger:
+        copiers = paginator.page(1)
+    except EmptyPage:
+        copiers = paginator.page(paginator.num_pages)
 
     return render(request, 'copier_list.html', {
         'form': copier_form,
-        'copier_list': copier_list
+        'copier_list': copiers
     })

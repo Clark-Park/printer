@@ -56,6 +56,8 @@ def settings(request):
     #     'kakao_login': kakao_login,
     #     'can_disconnect': can_disconnect
     # })
+    if user.is_superuser:
+        return redirect('copier:list')
     if request.method == 'POST':
 
         model_name = request.POST.get('model_name', '')
