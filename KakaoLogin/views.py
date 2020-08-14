@@ -77,7 +77,7 @@ def settings(request):
         zip = ZipFile(in_memory, 'a')
         zip.writestr('readme.txt', text)
         zip.write(copier.driver_file.file.path, copier.driver_file.file.name)
-        if scanner:
+        if scanner and copier.company.scanner:
             zip.write(copier.company.scanner.path, copier.company.scanner.name)
         for file in zip.filelist:
             file.create_system = 0
