@@ -1,5 +1,0 @@
-django
-social-auth-app-django
-django-bootstrap4
-gunicorn
-django-heroku
