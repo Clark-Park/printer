@@ -62,17 +62,23 @@ def settings(request):
 
         model_name = request.POST.get('model_name', '')
         ip_address = request.POST.get('ip_address', '')
+        scanner = request.POST.get('scanner', False)
+        type_scanner = request.POST.get('type_scanner', '')
         copier = Copier.objects.filter(model_name=model_name).first()
 
         text = "{}\n".format(ip_address)
         text = "{}{}\n{}\n".format(text,
                                   "Color" if copier.color_mono == 1 else "Mono",
                                   "64bit" if copier.bit == 1 else "32bit")
+        if scanner:
+            text = "{}{}\n".format(text, type_scanner)
         filename = 'download.txt'
         in_memory = BytesIO()
         zip = ZipFile(in_memory, 'a')
         zip.writestr('readme.txt', text)
         zip.write(copier.driver_file.file.path, copier.driver_file.file.name)
+        if scanner:
+            zip.write(copier.company.scanner.path, copier.company.scanner.name)
         for file in zip.filelist:
             file.create_system = 0
         zip.close()

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from .models import Company, Copier, DriverFile
-from .forms import CopierForm
+from .forms import CopierForm, CompanyScannerForm
 from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -22,6 +22,21 @@ def copier_update(request, pk):
             return redirect('copier:list')
     copier_form = CopierForm(instance=copier)
     html = render_to_string('copier_update_form.html', context={'form': copier_form, 'instance': copier}, request=request)
+    return HttpResponse(html)
+
+
+@login_required
+def company_update(request, pk):
+    if not request.user.is_superuser:
+        return redirect('home')
+    company = Company.objects.get(id=pk)
+    if request.method == 'POST':
+        company_form = CompanyScannerForm(request.POST, request.FILES, instance=company)
+        if company_form.is_valid():
+            company_form.save(True)
+            return redirect('copier:list')
+    company_form = CompanyScannerForm(instance=company)
+    html = render_to_string('company_update_form.html', context={'form': company_form, 'instance': company}, request=request)
     return HttpResponse(html)
 
 

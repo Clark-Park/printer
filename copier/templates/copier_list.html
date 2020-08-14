@@ -5,7 +5,7 @@
 {% block header %}
     <div class="d-flex justify-content-end">
         <div class="mr-2"><a href="/administrator/">Go To Administrator</a></div>
-        <div class="mr-2"><a href="javascript:;" data-toggle="modal" data-target="#upload-modal">Upload</a></div>
+        <div class="mr-2"><a href="javascript:;" data-toggle="modal" data-target="#upload-printer-modal">Upload Printer</a></div>
         <div ><a href="{% url 'logout' %}">Logout</a></div>
     </div>
 {% endblock %}
@@ -68,8 +68,12 @@
                 <tbody>
                 {% for copier in copier_list %}
                     <tr>
-                        <th scope="row">{{ copier.id }}</th>
-                        <td>{{ copier.company }}</td>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a class="edit-company" data-toggle="modal" data-target="#upload-scanner-modal" data-id="{{ copier.company.id }}" style="cursor: pointer;">
+                                {{ copier.company }}
+                            </a>
+                        </td>
                         <td>{{ copier.color_mono }}</td>
                         <td>{{ copier.bit }}</td>
                         <td>{{ copier.model_name }}</td>
@@ -123,7 +127,7 @@
         </div>
     </div>
 
-    <div id="upload-modal" class="modal" tabindex="-1" role="dialog">
+    <div id="upload-printer-modal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -149,6 +153,22 @@
         </div>
     </div>
 
+    <div id="upload-scanner-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Scanner Files</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(".edit-copier").click(function (e) {
             var id = $(this).data('id');
@@ -156,6 +176,14 @@
         });
         $('#copier-edit-modal').on('hidden.bs.modal', function () {
             $("#copier-edit-modal").find(".modal-body").html("");
-        })
+        });
+
+        $(".edit-company").click(function (e) {
+            var id = $(this).data('id');
+            $("#upload-scanner-modal").find(".modal-body").load("{% url 'copier:scanner' 'abcd' %}".replace('abcd', id));
+        });
+        $("#upload-scanner-modal").on('hidden.bs.modal', function () {
+            $("#upload-scanner-modal").find(".modal-body").html("");
+        });
     </script>
 {% endblock %}
