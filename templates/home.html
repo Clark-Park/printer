@@ -4,28 +4,13 @@
 {% block content %}
     <div class="row align-items-center h-100">
         <div class="container">
-            <div style="max-width: 430px; margin: 0 auto; padding: 20px 80px;">
-    {#            <h2>Login</h2>#}
-                <div></div>
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {% bootstrap_field form.username class="form-control" show_label=False %}
-                    </div>
-                    <div class="form-group">
-                        {% bootstrap_field form.password class="form-control" show_label=False %}
-                    </div>
-                    <br>
-                    <div class="form-group justify-content-center text-center">
-                        <button type="submit" class="btn btn-success" style="font-size: 19px; width: 100px;">Login</button>
-                    </div>
-        {#            {{ form.as_p }}#}
-                </form>
-
-                <a class="d-flex justify-content-around btn btn-warning w-100 text-white" style="background: orange;font-size: 19px;" href="{% url 'social:begin' 'kakao' %}">
-                    <img src="{% static 'image/kakao_talk.png' %}" width="40">
-                    <div style="align-self: center;">Login With KakaoTalk</div>
-                </a><br>
+            <div style="max-width: 1000px; margin: 0 auto; padding: 20px 80px; background-color: #02b0e4">
+                <div class="text-center font-weight-bolder">
+                    <h1 style="color: orangered">You are Liar, Faker</h1>
+                    <div>Why dint' you response?</div>
+                    <p>You read my messages but didn't response.</p>
+                    <p>You're just a cheap crook. </p>
+                </div>
             </div>
         </div>
     </div>
