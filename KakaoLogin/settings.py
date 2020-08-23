@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'bootstrap4',
     'social_django',
 
-    'copier',
 ]
 
 MIDDLEWARE = [
