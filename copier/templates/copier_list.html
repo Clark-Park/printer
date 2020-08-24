@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block header %}
+    <div class="d-flex justify-content-end">
+        <div class="mr-2"><a href="/administrator/">Go To Administrator</a></div>
+        <div class="mr-2"><a href="javascript:;" data-toggle="modal" data-target="#upload-printer-modal">Upload Printer</a></div>
+        <div ><a href="{% url 'logout' %}">Logout</a></div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="d-flex align-items-center ">
+        <div class="container">
+            <h1 class="text-center mb-lg-5 text-success">Add Copier Information</h1>
+            <form action="" method="post" class="form">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-3 align-self-center">
+                        {% bootstrap_field form.company class='form-group form-control' show_label=False %}
+                    </div>
+                    <div class="col-1 align-self-center">
+                        <div class="">
+                            <input id="id_{{ form.color_mono.name }}_color" type="radio" name="{{ form.color_mono.name }}" value="1" checked>
+                            <label for="id_{{ form.color_mono.name }}_color" >Color</label>
+                        </div>
+                        <div class="">
+                            <input id="id_{{ form.color_mono.name }}_mono" type="radio" name="{{ form.color_mono.name }}" value="0">
+                            <label for="id_{{ form.color_mono.name }}_mono" >Mono</label>
+                        </div>
+                    </div>
+                    <div class="col-1 align-self-center">
+                        <div>
+                            <input id="id_{{ form.bit.name }}_64" type="radio" name="{{ form.bit.name }}" value="1" checked>
+                            <label for="id_{{ form.bit.name }}_64">64bit</label>
+                        </div>
+                        <div>
+                            <input id="id_{{ form.bit.name }}_32" type="radio" name="{{ form.bit.name }}" value="0">
+                            <label for="id_{{ form.bit.name }}_32">32bit</label>
+                        </div>
+                    </div>
+                    <div class="col-3 align-self-center">
+                        {% bootstrap_field form.model_name class='form-group form-control' show_label=False %}
+                    </div>
+                    <div class="col-3 align-self-center">
+                        {% bootstrap_field form.driver_file class='form-group form-control' show_label=False %}
+                    </div>
+                    <div class="col-1 align-self-center">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success w-100">ADD</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">Color/Mono</th>
+                    <th scope="col">64bit/32bit</th>
+                    <th scope="col">Model Name</th>
+                    <th scope="col">Driver Link</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for copier in copier_list %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a class="edit-company" data-toggle="modal" data-target="#upload-scanner-modal" data-id="{{ copier.company.id }}" style="cursor: pointer;">
+                                {{ copier.company }}
+                            </a>
+                        </td>
+                        <td>{{ copier.color_mono }}</td>
+                        <td>{{ copier.bit }}</td>
+                        <td>{{ copier.model_name }}</td>
+                        <td>{{ copier.driver_file }}</td>
+                        <td><button class="btn-primary edit-copier" data-toggle="modal" data-target="#copier-edit-modal" data-id="{{ copier.id }}">Edit</button></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if copier_list.has_other_pages %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if copier_list.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ copier_list.previous_page_number }}">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
+                        {% endif %}
+                        {% for i in copier_list.paginator.page_range %}
+                            {% if copier_list.number == i %}
+                                <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if copier_list.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ copier_list.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="copier-edit-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Copier Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="upload-printer-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Driver Files</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="id-upload-form" action="{% url 'copier:upload' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-12 form-group">
+                                <input type="file" class="w-100" name="files" multiple>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100">Upload</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="upload-scanner-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Scanner Files</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".edit-copier").click(function (e) {
+            var id = $(this).data('id');
+            $("#copier-edit-modal").find(".modal-body").load("{% url 'copier:update' 'abcd' %}".replace('abcd', id));
+        });
+        $('#copier-edit-modal').on('hidden.bs.modal', function () {
+            $("#copier-edit-modal").find(".modal-body").html("");
+        });
+
+        $(".edit-company").click(function (e) {
+            var id = $(this).data('id');
+            $("#upload-scanner-modal").find(".modal-body").load("{% url 'copier:scanner' 'abcd' %}".replace('abcd', id));
+        });
+        $("#upload-scanner-modal").on('hidden.bs.modal', function () {
+            $("#upload-scanner-modal").find(".modal-body").html("");
+        });
+    </script>
+{% endblock %}

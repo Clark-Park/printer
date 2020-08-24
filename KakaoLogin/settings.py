@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'social_django',
 
+    'copier',
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,7 @@ STATICFILES_DIRS = [
 LOGIN_URL = '/'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = '/'
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'

@@ -23,7 +23,14 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
+    path('administrator/', admin.site.urls),
+    path('admin/', include('copier.urls')),
     path('', views.home, name='home'),
+    path('logout/', views.logout, name='logout'),
+    path('oauth/', include('social_django.urls', namespace='social')),
 
+    path('settings/', views.settings, name='settings'),
+    path('settings/password/', views.password, name='password'),
+    path('get_model_names/', view=views.get_model_names, name='get_model_names')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
               + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
